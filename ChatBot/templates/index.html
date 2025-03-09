@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Умный чат-бот</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chatbox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 300px;
+            height: 400px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .user { color: blue; }
+        .bot { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Чат-бот поддержки</h1>
+    <div id="chatbox"></div>
+    <input type="text" id="user_input" placeholder="Ваше сообщение" style="width: 240px;">
+    <button id="send">Отправить</button>
+
+    <script>
+        $("#send").click(function(){
+            var userMsg = $("#user_input").val();
+            if (userMsg.trim() === "") return;
+            $("#chatbox").append("<div class='message user'><strong>Вы:</strong> " + userMsg + "</div>");
+            $.post("/get", { msg: userMsg }, function(data){
+                $("#chatbox").append("<div class='message bot'><strong>Бот:</strong> " + data.response + "</div>");
+                // Автопрокрутка вниз
+                $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
+            });
+            $("#user_input").val("");
+        });
+
+        // Отправка сообщения по нажатию Enter
+        $("#user_input").keypress(function(e){
+            if(e.which === 13) {
+                $("#send").click();
+            }
+        });
+    </script>
+</body>
+</html>

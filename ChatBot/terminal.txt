@@ -1,0 +1,5 @@
+1) python -m venv venv
+2)Set-ExecutionPolicy RemoteSigned -Scope Process
+3) venv\Scripts\activate
+4)pip install flask
+5) python app.py - конец
